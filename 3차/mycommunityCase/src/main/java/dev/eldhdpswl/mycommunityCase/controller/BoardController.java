@@ -1,8 +1,8 @@
 package dev.eldhdpswl.mycommunityCase.controller;
 
 
-import dev.eldhdpswl.mycommunityCase.dto.BoardDto;
-import dev.eldhdpswl.mycommunityCase.repository.BoardRepository;
+import dev.eldhdpswl.mycommunityCase.model.BoardDto;
+import dev.eldhdpswl.mycommunityCase.service.BoardService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -14,26 +14,25 @@ import java.util.Collection;
 @RequestMapping("board")
 public class BoardController {
     private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
-    private final BoardRepository boardRepository;
+    private final BoardService boardService;
 
     public BoardController(
-            BoardRepository boardRepository
+            BoardService boardService
     ) {
-        this.boardRepository = boardRepository;
+        this.boardService = boardService;
     }
 
     @PostMapping
-    // ResponseEntity은 HTTP 응답을 만들수 있는 다양한 기능이 있다. 응답을 잘 조작할떄 사용한다.
     public ResponseEntity<BoardDto> createBoard(@RequestBody BoardDto dto){
-        return ResponseEntity.ok(boardRepository.create(dto));
+        return ResponseEntity.ok(boardService.create(dto));
     }
 
     @GetMapping("{id}")
     public ResponseEntity<BoardDto> readBoard(
             @PathVariable("id") Long id
     ){
-        BoardDto dto = boardRepository.read(id);
-        if (dto == null){
+        BoardDto dto = boardService.read(id);
+        if (dto == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(dto);
@@ -41,20 +40,21 @@ public class BoardController {
 
     @GetMapping
     public ResponseEntity<Collection<BoardDto>> readBoardAll(){
-        return ResponseEntity.ok(this.boardRepository.readAll());
+        return ResponseEntity.ok(this.boardService.readAll());
     }
+
 
     @PutMapping("{id}")
     public ResponseEntity<?> updateBoard(
-            @PathVariable("id") Long id, @RequestBody BoardDto dto){
-        if(!boardRepository.update(id, dto)) return ResponseEntity.notFound().build();
+            @PathVariable("id") Long id, @RequestBody BoardDto dto) {
+        if(!boardService.update(id, dto)) return ResponseEntity.notFound().build();
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteBoard(
             @PathVariable("id") Long id){
-        if(!boardRepository.delete(id)) return ResponseEntity.notFound().build();
+        if(!boardService.delete(id)) return ResponseEntity.notFound().build();
         return ResponseEntity.noContent().build();
     }
 

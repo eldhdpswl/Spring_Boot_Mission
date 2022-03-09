@@ -1,32 +1,24 @@
 package dev.eldhdpswl.mycommunityCase.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
-@Table(name = "user")
+@Table(name = "community_user")
 public class UserEntity {
-
-    @Id //JPA에 Long id가 primary key 변수라는 것을 알려준다.
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String username;
+    private String password;
 
-    @OneToOne(
+    @OneToMany(
             targetEntity = PostEntity.class,
-            fetch = FetchType.LAZY
+            fetch = FetchType.LAZY,
+            mappedBy = "writer"
     )
-    @JoinColumn(name = "post_id")
-    private PostEntity postEntity;
-
-    public UserEntity() {
-    }
-
-    public UserEntity(Long id, String name, PostEntity postEntity) {
-        this.id = id;
-        this.name = name;
-        this.postEntity = postEntity;
-    }
+    private List<PostEntity> writtenPosts;
 
     public Long getId() {
         return id;
@@ -36,28 +28,27 @@ public class UserEntity {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public PostEntity getPostEntity() {
-        return postEntity;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPostEntity(PostEntity postEntity) {
-        this.postEntity = postEntity;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    @Override
-    public String toString() {
-        return "UserEntity{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", postEntity=" + postEntity +
-                '}';
+    public List<PostEntity> getWrittenPosts() {
+        return writtenPosts;
+    }
+
+    public void setWrittenPosts(List<PostEntity> written_posts) {
+        this.writtenPosts = written_posts;
     }
 }

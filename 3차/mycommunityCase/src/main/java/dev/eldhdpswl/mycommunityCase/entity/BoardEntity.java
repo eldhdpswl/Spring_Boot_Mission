@@ -12,7 +12,6 @@ public class BoardEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "board_name")
     private String name;
 
     @OneToMany(
@@ -21,15 +20,6 @@ public class BoardEntity {
             mappedBy = "boardEntity"
     )
     private List<PostEntity> postEntityList = new ArrayList<>();
-
-    public BoardEntity() {
-    }
-
-    public BoardEntity(Long id, String name, List<PostEntity> postEntityList) {
-        this.id = id;
-        this.name = name;
-        this.postEntityList = postEntityList;
-    }
 
     public Long getId() {
         return id;
@@ -53,14 +43,5 @@ public class BoardEntity {
 
     public void setPostEntityList(List<PostEntity> postEntityList) {
         this.postEntityList = postEntityList;
-    }
-
-    @Override
-    public String toString() {
-        return "BoardEntity{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", postEntityList=" + postEntityList +
-                '}';
     }
 }

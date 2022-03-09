@@ -5,14 +5,19 @@ import javax.persistence.*;
 @Entity
 @Table(name = "post")
 public class PostEntity {
-
-    @Id //JPA에 Long id가 primary key 변수라는 것을 알려준다.
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
     private String content;
-    private String writer;
+
+    @ManyToOne(
+            targetEntity = UserEntity.class,
+            fetch = FetchType.LAZY
+    )
+    @JoinColumn(name = "user_id")
+    private UserEntity writer;
 
     @ManyToOne(
             targetEntity = BoardEntity.class,
@@ -20,26 +25,6 @@ public class PostEntity {
     )
     @JoinColumn(name = "board_id")
     private BoardEntity boardEntity;
-
-    @OneToOne(
-            targetEntity = UserEntity.class,
-            fetch = FetchType.LAZY,
-            mappedBy = "postEntity"
-    )
-    private UserEntity userEntity;
-
-
-    public PostEntity() {
-    }
-
-    public PostEntity(Long id, String title, String content, String writer, BoardEntity boardEntity, UserEntity userEntity) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.writer = writer;
-        this.boardEntity = boardEntity;
-        this.userEntity = userEntity;
-    }
 
     public Long getId() {
         return id;
@@ -65,11 +50,11 @@ public class PostEntity {
         this.content = content;
     }
 
-    public String getWriter() {
+    public UserEntity getWriter() {
         return writer;
     }
 
-    public void setWriter(String writer) {
+    public void setWriter(UserEntity writer) {
         this.writer = writer;
     }
 
@@ -79,25 +64,5 @@ public class PostEntity {
 
     public void setBoardEntity(BoardEntity boardEntity) {
         this.boardEntity = boardEntity;
-    }
-
-    public UserEntity getUserEntity() {
-        return userEntity;
-    }
-
-    public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity;
-    }
-
-    @Override
-    public String toString() {
-        return "PostEntity{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", content='" + content + '\'' +
-                ", writer='" + writer + '\'' +
-                ", boardEntity=" + boardEntity +
-                ", userEntity=" + userEntity +
-                '}';
     }
 }

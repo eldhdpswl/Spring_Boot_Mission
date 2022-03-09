@@ -1,80 +1,70 @@
 package dev.eldhdpswl.mycommunityCase.controller;
 
-
-
-import dev.eldhdpswl.mycommunityCase.dto.PostDto;
-import dev.eldhdpswl.mycommunityCase.repository.PostRepository;
+import dev.eldhdpswl.mycommunityCase.model.PostDto;
 import dev.eldhdpswl.mycommunityCase.service.PostService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
-import java.util.List;
-
 
 @RestController
-
-@RequestMapping("board/{boardId}/post") // 특정한 board안의 post를 찾는다라는 의미
+@RequestMapping("board/{boardId}/post")
 public class PostController {
     private static final Logger logger = LoggerFactory.getLogger(PostController.class);
-    private final PostRepository postRepository;
     private final PostService postService;
 
-    public PostController(
-            @Autowired PostRepository postRepository,
-            @Autowired PostService postService
-    ){
-        this.postRepository = postRepository;
+    public PostController(@Autowired PostService postService){
         this.postService = postService;
     }
 
     @PostMapping
-    public void createPost(@RequestBody PostDto dto){
-        // 파라미터에 @Valid를 사용하는 이유는 PostDto에서 valid를 확인을 해야된다는 것을 의미한다.
-        this.postService.createPost(dto);
-    }
-
-    @GetMapping("{id}")
-    public PostDto readPost(
-            @PathVariable("id") int id
-    ){
-        return this.postService.readPost(id);
-    }
-
-    @GetMapping("")
-    public List<PostDto> readPostAll(){
-        return this.postService.readPostAll();
-    }
-
-
-//    @GetMapping
-//    public ResponseEntity<Collection<PostDto>> readPostAll(
-//            @PathVariable("boardId") Long boardId){
-//        Collection<PostDto> postList = this.postRepository.readAll(boardId);
-//        if (postList == null) return ResponseEntity.notFound().build();
-//        else return ResponseEntity.ok(postList);
-//    }
-
-    @PutMapping("{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void updatePost(
-            @PathVariable("id") int id,
+    public ResponseEntity<PostDto> createPost(
+            @PathVariable("boardId") Long boardId,
             @RequestBody PostDto dto
     ){
-        this.postService.updatePost(id, dto);
+        PostDto result = this.postService.create(boardId, dto);
+        return ResponseEntity.ok(result);
     }
 
-    @DeleteMapping("{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void deletePost(
-            @PathVariable("id") int id
+    @GetMapping("{postId}")
+    public ResponseEntity<PostDto> readPost(
+            @PathVariable("boardId") Long boardId,
+            @PathVariable("postId") Long postId
     ){
-        this.postService.deletePost(id);
+        PostDto postDto = this.postService.read(boardId, postId);
+        if (postDto == null) return ResponseEntity.notFound().build();
+        else return ResponseEntity.ok(postDto);
     }
 
+    @GetMapping
+    public ResponseEntity<Collection<PostDto>> readPostAll(
+            @PathVariable("boardId") Long boardId){
+        Collection<PostDto> postList = this.postService.readAll(boardId);
+        if (postList == null) return ResponseEntity.notFound().build();
+        else return ResponseEntity.ok(postList);
+    }
 
+    @PutMapping("{postId}")
+    public ResponseEntity<?> updatePost(
+            @PathVariable("boardId") Long boardId,
+            @PathVariable("postId") Long postId,
+            @RequestBody PostDto dto
+    ) {
+        if (!postService.update(boardId, postId, dto))
+            return ResponseEntity.notFound().build();
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("{postId}")
+    public ResponseEntity<?> deletePost(
+            @PathVariable("boardId") Long boardId,
+            @PathVariable("postId") Long postId
+    ) {
+        if (!postService.delete(boardId, postId))
+            return ResponseEntity.notFound().build();
+        return ResponseEntity.noContent().build();
+    }
 }

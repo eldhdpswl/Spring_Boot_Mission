@@ -2,7 +2,11 @@
 
 ### The Origin: Java Spring Boot - Mission Page
 
-### Mission 2
+## Mission 1
+#### 소스코드 실행결과
+![](1차/img/sourceCodeRuntime.PNG)
+
+## Mission 2
 
 #### 1.게시판 생성(create-board)
 
@@ -44,3 +48,9 @@
 
 ![](2차/img/2.delete-board-post.PNG)
 
+
+## Mission 3
+
+#### 소스코드 실행결과
+
+![](3차/img/sourceCodeRunTime.PNG)
