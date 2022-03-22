@@ -54,3 +54,10 @@
 #### 소스코드 실행결과
 
 ![](3차/img/sourceCodeRunTime.PNG)
+
+
+## Mission 4
+
+#### 소스코드 실행결과
+
+![](4차/img/basic_.PNG)
