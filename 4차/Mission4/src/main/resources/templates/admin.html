@@ -1,0 +1,19 @@
+<!-- sec가 들어가는 이유는 인증관련된 설정이 필요해서 sec에서 몇가지 설정을 가져와야된다. -->
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:th="http://www.thymleaf.org"
+        xmlns:sec="http://www.w3.org/1999/xhtml"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Admin Home</title>
+</head>
+<body>
+    Hello Admin!
+    <form th:action="@{/user/logout}" method="post"> <!-- thymleaf에서 th:action을 하는 이유는 정적인지 동적인지 확인하기 위해서 -->
+        <input type="submit" th:value="로그아웃">
+    </form>
+
+</body>
+</html>
