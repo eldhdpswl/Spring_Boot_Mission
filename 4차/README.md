@@ -67,7 +67,9 @@ Spring Security의 기능은 대부분 Java Servlet Filter를 구성함으로서
         - 참고 (b, c)
             
             ```java
-            		private final CustomSuccessHandler customSuccessHandler;
+            	//WebSecurityConfig
+				
+				private final CustomSuccessHandler customSuccessHandler;
             
                 public WebSecurityConfig(
                         @Autowired CustomUserDetailsService customUserDetailsService,
@@ -79,7 +81,7 @@ Spring Security의 기능은 대부분 Java Servlet Filter를 구성함으로서
                     this.customSuccessHandler = customSuccessHandler;
                 }
             ...
-            				.formLogin()
+            		.formLogin()
                     .loginPage("/user/login")
                     .defaultSuccessUrl("/home")
                     .successHandler(customSuccessHandler)
@@ -88,6 +90,8 @@ Spring Security의 기능은 대부분 Java Servlet Filter를 구성함으로서
             ```
             
             ```java
+			//CustomSuccessHandler
+			
             @Component
             public class CustomSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
             
@@ -113,6 +117,8 @@ Spring Security의 기능은 대부분 Java Servlet Filter를 구성함으로서
         - 참고
             
             ```java
+			//CustomSuccessHandler
+			
             SecurityContextHolder.getContext().setAuthentication(new Authentication() {
                     @Override
                     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -154,6 +160,8 @@ Spring Security의 기능은 대부분 Java Servlet Filter를 구성함으로서
             ```
             
             ```java
+			//CustomSuccessHandler
+			
             http
                     .authorizeRequests()
                     .antMatchers(
